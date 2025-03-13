@@ -8,7 +8,7 @@
     "require": {
         "php": "^8.2",
         "backpack/crud": "^6.8",
-        "barryvdh/laravel-elfinder": "*",
+        "barryvdh/laravel-elfinder": "^0.5.4",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1"
     },
