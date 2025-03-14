@@ -24,6 +24,7 @@
         "spatie/laravel-medialibrary": "^11.12"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^3.5",
         "backpack/generators": "^4.0",
         "fakerphp/faker": "^1.23",
         "jasonmccreary/laravel-test-assertions": "^2.6",
@@ -41,7 +42,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
