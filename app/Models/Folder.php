@@ -15,7 +15,8 @@ use Spatie\Permission\Models\Role;
 
 class Folder extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     const PERMISSIONS = ['create', 'read', 'update', 'delete'];
     const ROLES = ['admin', 'editor', 'viewer'];
@@ -40,6 +41,7 @@ class Folder extends Model
 
         return $result;
     }
+
     public function getDisplayAttribute(): true
     {
         return true;
@@ -62,7 +64,9 @@ class Folder extends Model
 
     public function initAuthoredFolder($folder_id = null): void
     {
-        if($folder_id === null) $folder_id = $this->id;
+        if ($folder_id === null) {
+            $folder_id = $this->id;
+        }
 
         foreach (self::PERMISSIONS as $permission) {
             try {
@@ -73,10 +77,9 @@ class Folder extends Model
         }
 
         foreach (self::ROLES as $role) {
-
             $roleNew = Role::create(['name' => "Folder.{$folder_id}.{$role}"]);
 
-            if($role === 'admin') {
+            if ($role === 'admin') {
                 $roleNew->givePermissionTo([
                     "Folder.{$folder_id}.create",
                     "Folder.{$folder_id}.read",
@@ -85,7 +88,7 @@ class Folder extends Model
                 ]);
             }
 
-            if($role === 'editor') {
+            if ($role === 'editor') {
                 $roleNew->givePermissionTo([
                     "Folder.{$folder_id}.create",
                     "Folder.{$folder_id}.read",
@@ -93,31 +96,32 @@ class Folder extends Model
                 ]);
             }
 
-            if($role === 'viewer') {
+            if ($role === 'viewer') {
                 $roleNew->givePermissionTo([
                     "Folder.{$folder_id}.read",
                 ]);
             }
-
         }
     }
 
     public function hasPermission($user, string $permission): bool
     {
         $folderPermission = "Folder.{$this->id}.{$permission}";
+
         return $user?->can($folderPermission);
     }
 
     public function hasRole($user, string $role): bool
     {
         $folderRole = "Folder.{$this->id}.{$role}";
+
         return $user?->hasRole($folderRole);
     }
 
     public function members(): array
     {
         return [
-            'admin' => User::role("Folder.{$this->id}.admin")->get(),
+            'admin'   => User::role("Folder.{$this->id}.admin")->get(),
             'editors' => User::role("Folder.{$this->id}.editor")->get(),
             'viewers' => User::role("Folder.{$this->id}.viewer")->get(),
         ];
@@ -140,6 +144,7 @@ class Folder extends Model
             $path[] = $folder->name;
             $folder = $folder->parent;
         }
+
         return implode('/', array_reverse($path));
     }
 
@@ -165,11 +170,12 @@ class Folder extends Model
         return $result;
     }
 
-    public function deleteFilesInStorage() : void
+    public function deleteFilesInStorage(): void
     {
         $this->files->each(function ($file) {
-
-            if($file->type !== 'link' && $file->path != null) Storage::delete($file->path);
+            if ($file->type !== 'link' && $file->path != null) {
+                Storage::delete($file->path);
+            }
         });
 
         $this->children->each(function ($folder) {
@@ -177,7 +183,7 @@ class Folder extends Model
         });
     }
 
-    public function deleteChildren() : void
+    public function deleteChildren(): void
     {
         $this->files->each(function ($file) {
             $file->delete();
@@ -189,7 +195,7 @@ class Folder extends Model
         });
     }
 
-    public function restoreChildren() : void
+    public function restoreChildren(): void
     {
         $this->files()->onlyTrashed()->each(function ($file) {
             $file->restore();
@@ -201,7 +207,7 @@ class Folder extends Model
         });
     }
 
-    public function displayBreadcrumb() : array
+    public function displayBreadcrumb(): array
     {
         $folder = $this;
         $breadcrumb = [];
@@ -234,7 +240,7 @@ class Folder extends Model
 
     public function assignRoleAfterCreate(Folder $parent_folder): void
     {
-        if($parent_folder->folder_id !== null) {
+        if ($parent_folder->folder_id !== null) {
             $members = $parent_folder->members();
             foreach ($members as $role => $users) {
                 foreach ($users as $user) {
@@ -250,6 +256,7 @@ class Folder extends Model
      * Lấy tất cả thư mục con bao gồm cả các cấp con của nó.
      *
      * @param int|null $parent_id
+     *
      * @return Collection
      */
     public static function getAllChildren(?int $parent_id = 1): Collection
@@ -258,6 +265,7 @@ class Folder extends Model
         $folders->each(function ($folder) {
             $folder->childrens = Folder::getAllChildren($folder->id);
         });
+
         return $folders;
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Backpack\PageManager\app\Models\Page;
-use App\Http\Controllers\Controller;
 
 class PageController extends Controller
 {
@@ -11,8 +10,7 @@ class PageController extends Controller
     {
         $page = Page::findBySlug($slug);
 
-        if (!$page)
-        {
+        if (!$page) {
             abort(404, 'Please go back to our <a href="'.url('').'">homepage</a>.');
         }
 

@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class File extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     const TYPE = ['link', 'document', 'image', 'video', 'audio', 'file'];
     const IMAGE_MIME = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/svg+xml', 'image/webp'];
@@ -26,10 +27,12 @@ class File extends Model
     ];
 
     protected $appends = ['_display', 'permissions'];
+
     public function getDisplayAttribute(): true
     {
         return true;
     }
+
     public function getPermissionsAttribute(): array
     {
         $user = auth()->user();
@@ -38,8 +41,10 @@ class File extends Model
         foreach ($permissions as $permission) {
             $result[$permission] = $this->hasPermission($user, $permission);
         }
+
         return $result;
     }
+
     public function folder(): BelongsTo
     {
         return $this->belongsTo(Folder::class);
@@ -60,6 +65,7 @@ class File extends Model
 
         return false;
     }
+
     public function filePermissions($user): array
     {
         $permissions = Folder::PERMISSIONS;
@@ -67,6 +73,7 @@ class File extends Model
         foreach ($permissions as $permission) {
             $result[$permission] = $this->hasPermission($user, $permission);
         }
+
         return $result;
     }
 }

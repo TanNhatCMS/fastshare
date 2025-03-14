@@ -11,20 +11,21 @@ abstract class BaseAPIController extends Controller
     protected array $request_data;
     protected Request $request;
 
-    abstract function rules(bool $id = false): array;
+    abstract public function rules(bool $id = false): array;
 
-    abstract function messages(): array;
+    abstract public function messages(): array;
 
     protected function validatorApi(bool $edit = false): ?bool
     {
         $validator = Validator::make($this->request_data, $this->rules($edit), $this->messages());
 
-        if ($validator->fails())
+        if ($validator->fails()) {
             abort(response()->json([
                 'success' => false,
                 'message' => $validator->errors()->first(),
-                'errors' => $validator->errors(),
+                'errors'  => $validator->errors(),
             ], 400));
+        }
 
         return true;
     }
@@ -36,12 +37,16 @@ abstract class BaseAPIController extends Controller
 
         $routeCurrent = $request->route()->getName();
 
-        if (in_array($routeCurrent, $ignore)) return;
+        if (in_array($routeCurrent, $ignore)) {
+            return;
+        }
 
-        if ($id === null) abort(response()->json([
-            'success' => false,
-            'message' => __('messages.required', ['attribute' => 'ID'])
-        ], 400));
+        if ($id === null) {
+            abort(response()->json([
+                'success' => false,
+                'message' => __('messages.required', ['attribute' => 'ID']),
+            ], 400));
+        }
     }
 
     protected function checkPermissionFolder(string $permission, $folder_id = null, $allow_trash = false): void
@@ -49,24 +54,29 @@ abstract class BaseAPIController extends Controller
         $folder_id = $folder_id === null ?
             $this->request_data['id'] :
             $folder_id;
-        if ($this->request->user()?->hasRole('admin')) return;
+        if ($this->request->user()?->hasRole('admin')) {
+            return;
+        }
         $user = $this->request->user();
         $folder = Folder::find($folder_id);
-        if ($allow_trash) $folder = Folder::withTrashed()->find($folder_id);
+        if ($allow_trash) {
+            $folder = Folder::withTrashed()->find($folder_id);
+        }
         if (!$folder) {
-             abort(response()->json([
+            abort(response()->json([
                 'success' => false,
-                'message' => __('messages.not_found', ['attribute' => 'Folder'])
+                'message' => __('messages.not_found', ['attribute' => 'Folder']),
             ], 404));
         }
-        if ( $folder->hasRole($user,'admin')) return;
+        if ($folder->hasRole($user, 'admin')) {
+            return;
+        }
         $hasPermission = $folder->hasPermission($user, $permission);
         if (!$hasPermission) {
-             abort(response()->json([
+            abort(response()->json([
                 'success' => false,
-                'message' => __('messages.permission_denied')
+                'message' => __('messages.permission_denied'),
             ], 403));
         }
-
     }
 }
