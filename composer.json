@@ -12,6 +12,7 @@
         "backpack/medialibrary-uploaders": "^1.2",
         "backpack/pagemanager": "^3.3",
         "backpack/permissionmanager": "^7.2",
+        "backpack/settings": "^3.1",
         "backpack/theme-tabler": "^1.2",
         "barryvdh/laravel-elfinder": "^0.5.4",
         "laravel/framework": "^12.0",
