@@ -10,6 +10,7 @@
         "backpack/crud": "^6.8",
         "backpack/filemanager": "^3.0",
         "backpack/medialibrary-uploaders": "^1.2",
+        "backpack/pagemanager": "^3.3",
         "backpack/permissionmanager": "^7.2",
         "backpack/theme-tabler": "^1.2",
         "barryvdh/laravel-elfinder": "^0.5.4",
