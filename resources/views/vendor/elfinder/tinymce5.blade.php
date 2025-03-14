@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+    
     @include('vendor.elfinder.common_scripts')
     @include('vendor.elfinder.common_styles', ['styleBodyElement' => true])
 
@@ -28,7 +28,7 @@
                 speed: 100,
                 // set your elFinder options here
                 @if($locale)
-                lang: '{{ $locale }}', // locale
+                    lang: '{{ $locale }}', // locale
                 @endif
                 customData: {
                     _token: '{{ csrf_token() }}'

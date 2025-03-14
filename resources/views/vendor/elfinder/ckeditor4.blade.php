@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
-<head>
+    <head>
+        
+        @include('vendor.elfinder.common_scripts')
+        @include('vendor.elfinder.common_styles')
 
-    @include('vendor.elfinder.common_scripts')
-    @include('vendor.elfinder.common_styles')
+        <!-- elFinder initialization (REQUIRED) -->
+        <script type="text/javascript" charset="utf-8">
+            // Helper function to get parameters from the query string.
+            function getUrlParam(paramName) {
+                var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i') ;
+                var match = window.location.search.match(reParam) ;
 
-    <!-- elFinder initialization (REQUIRED) -->
-    <script type="text/javascript" charset="utf-8">
-        // Helper function to get parameters from the query string.
-        function getUrlParam(paramName) {
-            var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i') ;
-            var match = window.location.search.match(reParam) ;
+                return (match && match.length > 1) ? match[1] : '' ;
+            }
 
-            return (match && match.length > 1) ? match[1] : '' ;
-        }
+            $().ready(function() {
+                var funcNum = getUrlParam('CKEditorFuncNum');
+                var theme = 'default';
 
-        $().ready(function() {
-            var funcNum = getUrlParam('CKEditorFuncNum');
-            var theme = 'default';
-
-            var elf = $('#elfinder').elfinder({
+                var elf = $('#elfinder').elfinder({
                     // set your elFinder options here
                     @if($locale)
-                    lang: '{{ $locale }}', // locale
+                        lang: '{{ $locale }}', // locale
                     @endif
-                    customData: {
+                    customData: { 
                         _token: '{{ csrf_token() }}'
                     },
                     url: '{{ route("elfinder.connector") }}',  // connector URL
@@ -45,23 +45,23 @@
                     });
                 }).elfinder('instance');
 
-            function isElfinderInDarkMode() {
-                return typeof window.parent?.colorMode !== 'undefined' && window.parent.colorMode.result === 'dark';
-            }
+                function isElfinderInDarkMode() {
+                    return typeof window.parent?.colorMode !== 'undefined' && window.parent.colorMode.result === 'dark';
+                }
 
-            function setElFinderColorMode() {
-                theme = isElfinderInDarkMode() ? 'dark' : 'default';
+                function setElFinderColorMode() {
+                    theme = isElfinderInDarkMode() ? 'dark' : 'default';
 
-                let instance = $('#elfinder').elfinder('instance');
-                instance.changeTheme(theme).storage('theme', theme);
-            }
-        });
-    </script>
-</head>
-<body>
+                    let instance = $('#elfinder').elfinder('instance');
+                    instance.changeTheme(theme).storage('theme', theme);
+                }
+            });
+        </script>
+    </head>
+    <body>
 
-<!-- Element where elFinder will be created (REQUIRED) -->
-<div id="elfinder"></div>
+        <!-- Element where elFinder will be created (REQUIRED) -->
+        <div id="elfinder"></div>
 
-</body>
+    </body>
 </html>

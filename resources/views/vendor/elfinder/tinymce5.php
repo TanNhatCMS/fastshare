@@ -41,29 +41,29 @@
             var theme = 'default';
 
             var elf = $('#elfinder').elfinder({
-                    // set your elFinder options here
-                    <?php if ($locale) { ?>
-                    lang: '<?= $locale ?>', // locale
-                    <?php } ?>
-                    customData: {
-                        _token: '<?= csrf_token() ?>'
-                    },
-                    url: '<?= route('elfinder.connector') ?>',  // connector URL
-                    soundPath: '<?= asset($dir.'/sounds') ?>',
-                    getFileCallback: function(file) { // editor callback
-                        FileBrowserDialogue.mySubmit(file); // pass selected file path to TinyMCE
-                    },
-                    themes: {
-                        default : 'https://cdn.jsdelivr.net/gh/RobiNN1/elFinder-Material-Theme/manifests/material-gray.json',
-                        dark : 'https://cdn.jsdelivr.net/gh/RobiNN1/elFinder-Material-Theme/manifests/material-default.json',
-                    },
-                    theme: theme
+                // set your elFinder options here
+                <?php if ($locale) { ?>
+                lang: '<?= $locale ?>', // locale
+                <?php } ?>
+                customData: {
+                    _token: '<?= csrf_token() ?>'
                 },
-                function(fm, extraObj) {
-                    fm.bind('open', function() {
-                        setElFinderColorMode();
-                    });
-                }).elfinder('instance');
+                url: '<?= route('elfinder.connector') ?>',  // connector URL
+                soundPath: '<?= asset($dir.'/sounds') ?>',
+                getFileCallback: function(file) { // editor callback
+                    FileBrowserDialogue.mySubmit(file); // pass selected file path to TinyMCE
+                },
+                themes: {
+                    default : 'https://cdn.jsdelivr.net/gh/RobiNN1/elFinder-Material-Theme/manifests/material-gray.json',
+                    dark : 'https://cdn.jsdelivr.net/gh/RobiNN1/elFinder-Material-Theme/manifests/material-default.json',
+                },
+                theme: theme
+            },
+            function(fm, extraObj) {
+                fm.bind('open', function() {
+                    setElFinderColorMode();
+                });
+            }).elfinder('instance');
 
             function isElfinderInDarkMode() {
                 return typeof window.parent?.colorMode !== 'undefined' && window.parent.colorMode.result === 'dark';
