@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Tag;
-use App\Http\Requests\ArticleRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 //use Backpack\CRUD\app\Http\Controllers\Operations\BulkCloneOperation;
 //use Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
