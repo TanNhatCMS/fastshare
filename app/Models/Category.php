@@ -6,6 +6,8 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
@@ -53,19 +55,19 @@ class Category extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function parent()
+    public function parent(): BelongsTo
     {
-        return $this->belongsTo('Backpack\NewsCRUD\app\Models\Category', 'parent_id');
+        return $this->belongsTo(__CLASS__, 'parent_id');
     }
 
-    public function children()
+    public function children(): HasMany
     {
-        return $this->hasMany('Backpack\NewsCRUD\app\Models\Category', 'parent_id');
+        return $this->hasMany(__CLASS__, 'parent_id');
     }
 
-    public function articles()
+    public function articles(): HasMany
     {
-        return $this->hasMany('Backpack\NewsCRUD\app\Models\Article');
+        return $this->hasMany(Article::class);
     }
 
     /*

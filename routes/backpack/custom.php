@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\ArticleCrudController;
+use App\Http\Controllers\Admin\CategoryCrudController;
+use App\Http\Controllers\Admin\TagCrudController;
 use Illuminate\Support\Facades\Route;
 
 // --------------------------
@@ -16,6 +19,9 @@ Route::group([
     ),
     'namespace' => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
+    Route::crud('article', ArticleCrudController::class);
+    Route::crud('category', CategoryCrudController::class);
+    Route::crud('tag', TagCrudController::class);
 }); // this should be the absolute last line of this file
 
 /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Category;
 use App\Http\Requests\CategoryRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -24,7 +25,7 @@ class CategoryCrudController extends CrudController
 
     public function setup()
     {
-        CRUD::setModel("Backpack\NewsCRUD\app\Models\Category");
+        CRUD::setModel(Category::class);
         CRUD::setRoute(config('backpack.base.route_prefix', 'admin').'/category');
         CRUD::setEntityNameStrings('category', 'categories');
     }

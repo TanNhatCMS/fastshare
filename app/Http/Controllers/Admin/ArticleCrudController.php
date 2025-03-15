@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Article;
+use App\Models\Category;
+use App\Models\Tag;
 use App\Http\Requests\ArticleRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 //use Backpack\CRUD\app\Http\Controllers\Operations\BulkCloneOperation;
@@ -13,6 +16,8 @@ use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+use Exception;
+use Illuminate\Database\Eloquent\Casts\Json;
 
 class ArticleCrudController extends CrudController
 {
@@ -26,6 +31,9 @@ class ArticleCrudController extends CrudController
     use ShowOperation;
 //    use FetchOperation;
 
+    /**
+     * @throws Exception
+     */
     public function setup()
     {
         /*
@@ -33,7 +41,7 @@ class ArticleCrudController extends CrudController
         | BASIC CRUD INFORMATION
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel(\App\Models\Article::class);
+        $this->crud->setModel(Article::class);
         $this->crud->setRoute(config('backpack.base.route_prefix', 'admin').'/article');
         $this->crud->setEntityNameStrings('article', 'articles');
 
@@ -74,7 +82,7 @@ class ArticleCrudController extends CrudController
                 'type'  => 'select2',
                 'label' => 'Category',
             ], function () {
-                return \App\Models\Category::all()->keyBy('id')->pluck('name', 'id')->toArray();
+                return Category::all()->keyBy('id')->pluck('name', 'id')->toArray();
             }, function ($value) { // if the filter is active
                 $this->crud->addClause('where', 'category_id', $value);
             });
@@ -84,11 +92,11 @@ class ArticleCrudController extends CrudController
                 'type'  => 'select2_multiple',
                 'label' => 'Tags',
             ], function () {
-                return \App\Models\Tag::all()->keyBy('id')->pluck('name', 'id')->toArray();
+                return Tag::all()->keyBy('id')->pluck('name', 'id')->toArray();
             }, function ($values) { // if the filter is active
                 $this->crud->query = $this->crud->query->whereHas('tags', function ($q) use ($values) {
-                    foreach (json_decode($values) as $key => $value) {
-                        if ($key == 0) {
+                    foreach (json_decode($values, false, 512, JSON_THROW_ON_ERROR) as $key => $value) {
+                        if ($key === 0) {
                             $q->where('tags.id', $value);
                         } else {
                             $q->orWhere('tags.id', $value);
@@ -179,7 +187,7 @@ class ArticleCrudController extends CrudController
      */
     public function fetchCategory()
     {
-        return $this->fetch(\App\Models\Category::class);
+        return $this->fetch(Category::class);
     }
 
     /**
@@ -189,6 +197,6 @@ class ArticleCrudController extends CrudController
      */
     public function fetchTags()
     {
-        return $this->fetch(\App\Models\Tag::class);
+        return $this->fetch(Tag::class);
     }
 }
