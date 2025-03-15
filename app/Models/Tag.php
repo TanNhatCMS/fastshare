@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Tag extends Model
 {
     use CrudTrait;
-    use Sluggable, SluggableScopeHelpers;
+    use Sluggable;
+    use SluggableScopeHelpers;
 
     /*
     |--------------------------------------------------------------------------

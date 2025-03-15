@@ -25,11 +25,11 @@ class ArticleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|min:2|max:255',
-            'slug' => 'unique:articles,slug,'.\Request::get('id'),
-            'content' => 'required|min:2',
-            'date' => 'required|date',
-            'status' => 'required',
+            'title'       => 'required|min:2|max:255',
+            'slug'        => 'unique:articles,slug,'.\Request::get('id'),
+            'content'     => 'required|min:2',
+            'date'        => 'required|date',
+            'status'      => 'required',
             'category_id' => 'required',
         ];
     }
