@@ -13,8 +13,8 @@ Route::get('{page}/{subs?}', ['uses' => '\App\Http\Controllers\PageController@in
     ->where(['page' => '^(((?=(?!admin))(?=(?!\/)).))*$', 'subs' => '.*']);
 
 Route::group([
-    'prefix' => config('backpack.base.route_prefix', 'admin'),
-    'middleware' => ['web', 'auth']
+    'prefix'     => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => ['web', 'auth'],
 ], function () {
     //NewsCRUD
     Route::crud('article', ArticleCrudController::class);

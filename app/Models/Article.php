@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Article extends Model
 {
     use CrudTrait;
-    use Sluggable, SluggableScopeHelpers;
+    use Sluggable;
+    use SluggableScopeHelpers;
 
     /*
     |--------------------------------------------------------------------------
@@ -28,7 +29,7 @@ class Article extends Model
     // protected $dates = [];
     protected $casts = [
         'featured' => 'boolean',
-        'date' => 'date',
+        'date'     => 'date',
     ];
 
     /**

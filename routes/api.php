@@ -8,9 +8,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group([
     'middleware' => 'api',
-    'prefix' => 'auth'
+    'prefix'     => 'auth',
 ], function () {
-
     Route::post('/register', [AuthController::class, 'register'])
         ->middleware('auth:api')
         ->name('register');
@@ -30,20 +29,18 @@ Route::group([
         ->middleware('auth:api')
         ->name('profile');
 
-    Route::post("my-folder", [AuthController::class, 'myFolders'])
+    Route::post('my-folder', [AuthController::class, 'myFolders'])
         ->middleware('auth:api')
         ->name('folders.my');
 
-    Route::post("my-shortcut", [AuthController::class, 'myShortcuts'])
+    Route::post('my-shortcut', [AuthController::class, 'myShortcuts'])
         ->middleware('auth:api')
         ->name('folders.my-shortcut');
 });
 
-
 Route::group([
     'middleware' => ['api', 'auth:api'],
 ], function () {
-
     Route::post('folders', [FolderController::class, 'index'])
         ->name('folders.index');
 
@@ -69,11 +66,9 @@ Route::group([
         ->name('folders.set-shortcut');
 });
 
-
 Route::group([
     'middleware' => ['api', 'auth:api'],
 ], function () {
-
     Route::post('file', [FileController::class, 'index'])
         ->name('file.index');
 
@@ -108,11 +103,9 @@ Route::group([
 
 Route::group([
     'middleware' => ['api', 'auth:api', 'role:admin'],
-    'prefix' => 'admin'
+    'prefix'     => 'admin',
 ], function () {
-
     Route::prefix('folder')->group(function () {
-
         Route::post('add-user', [AuthorizeController::class, 'addUserToFolder'])
             ->name('admin.folder.add-user');
 
@@ -126,18 +119,18 @@ Route::group([
             ->name('admin.folder.home');
     });
 
-    Route::post("list-user", [AuthController::class, 'listUsers'])
+    Route::post('list-user', [AuthController::class, 'listUsers'])
         ->middleware('auth:api')
         ->name('admin.list-user');
 
     Route::post('list-folder-of-user', [AuthorizeController::class, 'listFoldersOfUser'])
         ->name('admin.folder.list-folder-of-user');
 
-    Route::post("edit-user", [AuthController::class, 'editUser'])
+    Route::post('edit-user', [AuthController::class, 'editUser'])
         ->middleware('auth:api')
         ->name('admin.edit-user');
 
-    Route::post("delete-user", [AuthController::class, 'deleteUser'])
+    Route::post('delete-user', [AuthController::class, 'deleteUser'])
         ->middleware('auth:api')
         ->name('admin.delete-user');
 });
