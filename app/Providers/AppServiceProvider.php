@@ -14,6 +14,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(ElfinderController::class, ElfinderCustomController::class);
+        // register its dependencies
+        $this->app->register(\Cviebrock\EloquentSluggable\ServiceProvider::class);
     }
 
     /**
