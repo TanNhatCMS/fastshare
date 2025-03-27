@@ -39,8 +39,8 @@ return [
      *   - boom!
      */
     'styles' => [
-        base_path('vendor/backpack/theme-tabler/resources/assets/css/color-adjustments.css'),
-        base_path('vendor/backpack/theme-tabler/resources/assets/css/colors.css'),
+        base_path('vendor/tannhatcms/theme-tabler/resources/assets/css/color-adjustments.css'),
+        base_path('vendor/tannhatcms/theme-tabler/resources/assets/css/colors.css'),
     ],
 
     /**
