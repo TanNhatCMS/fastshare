@@ -39,7 +39,7 @@
 
         $().ready(function() {
             var theme = 'default';
-
+            
             var elf = $('#elfinder').elfinder({
                 // set your elFinder options here
                 <?php if ($locale) { ?>

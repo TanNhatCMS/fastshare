@@ -28,14 +28,14 @@
 
 @php
   $breadcrumbs = [
-    trans('backpack::crud.admin') => url(config('backpack.base.route_prefix'), 'dashboard'),
-    trans('backpack::crud.file_manager') => false,
+    trans('tannhatcms::crud.admin') => url(config('backpack.base.route_prefix'), 'dashboard'),
+    trans('tannhatcms::crud.file_manager') => false,
   ];
 @endphp
 
 @section('header')
     <section class="container-fluid" bp-section="page-header">
-      <h1 bp-section="page-heading">{{ trans('backpack::crud.file_manager') }}</h1>
+      <h1 bp-section="page-heading">{{ trans('tannhatcms::crud.file_manager') }}</h1>
     </section>
 @endsection
 
