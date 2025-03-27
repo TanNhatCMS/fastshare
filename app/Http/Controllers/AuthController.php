@@ -20,7 +20,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        if (!$request->user()->hasRole('admin')) {
+        if (! $request->user()->hasRole('admin')) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.permission_denied'),
@@ -28,26 +28,26 @@ class AuthController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'name'                  => 'required|min:3|max:50|regex:/^[\pL\s]+$/u|unique:users,name',
-            'username'              => 'required|unique:users|min:4|max:32|regex:/^[a-zA-Z0-9_.]+$/',
+            'name' => 'required|min:3|max:50|regex:/^[\pL\s]+$/u|unique:users,name',
+            'username' => 'required|unique:users|min:4|max:32|regex:/^[a-zA-Z0-9_.]+$/',
             'password_confirmation' => 'required',
-            'password'              => 'required|confirmed|min:4|max:64',
+            'password' => 'required|confirmed|min:4|max:64',
         ], [
-            'name.required'                  => __('messages.required', ['attribute' => 'Họ và tên']),
-            'name.regex'                     => __('messages.regex', ['attribute' => 'Họ và tên']),
-            'name.unique'                    => __('messages.unique', ['attribute' => 'Họ và tên']),
-            'name.min'                       => __('messages.min', ['attribute' => 'Họ và tên', 'min' => 3]),
-            'name.max'                       => __('messages.max', ['attribute' => 'Họ và tên', 'max' => 50]),
-            'username.required'              => __('messages.required', ['attribute' => 'Tài khoản']),
-            'username.unique'                => __('messages.unique', ['attribute' => 'Tài khoản']),
-            'username.min'                   => __('messages.min', ['attribute' => 'Tài khoản', 'min' => 4]),
-            'username.max'                   => __('messages.max', ['attribute' => 'Tài khoản', 'max' => 32]),
-            'username.regex'                 => __('messages.regex', ['attribute' => 'Tài khoản']),
-            'password.required'              => __('messages.required', ['attribute' => 'Mật khẩu']),
+            'name.required' => __('messages.required', ['attribute' => 'Họ và tên']),
+            'name.regex' => __('messages.regex', ['attribute' => 'Họ và tên']),
+            'name.unique' => __('messages.unique', ['attribute' => 'Họ và tên']),
+            'name.min' => __('messages.min', ['attribute' => 'Họ và tên', 'min' => 3]),
+            'name.max' => __('messages.max', ['attribute' => 'Họ và tên', 'max' => 50]),
+            'username.required' => __('messages.required', ['attribute' => 'Tài khoản']),
+            'username.unique' => __('messages.unique', ['attribute' => 'Tài khoản']),
+            'username.min' => __('messages.min', ['attribute' => 'Tài khoản', 'min' => 4]),
+            'username.max' => __('messages.max', ['attribute' => 'Tài khoản', 'max' => 32]),
+            'username.regex' => __('messages.regex', ['attribute' => 'Tài khoản']),
+            'password.required' => __('messages.required', ['attribute' => 'Mật khẩu']),
             'password_confirmation.required' => __('messages.required', ['attribute' => 'Xác nhận mật khẩu']),
-            'password.confirmed'             => __('messages.confirmed', ['attribute' => 'Xác nhận mật khẩu']),
-            'password.min'                   => __('messages.min', ['attribute' => 'Mật khẩu', 'min' => 4]),
-            'password.max'                   => __('messages.max', ['attribute' => 'Mật khẩu', 'max' => 64]),
+            'password.confirmed' => __('messages.confirmed', ['attribute' => 'Xác nhận mật khẩu']),
+            'password.min' => __('messages.min', ['attribute' => 'Mật khẩu', 'min' => 4]),
+            'password.max' => __('messages.max', ['attribute' => 'Mật khẩu', 'max' => 64]),
         ]);
 
         if ($validator->fails()) { // kiểm tra xem có lỗi hay không có ít nhất một lỗi sẽ trả về false còn khong trả về true
@@ -83,7 +83,7 @@ class AuthController extends Controller
     {
         $credentials = request(['username', 'password']);
 
-        if (!$token = auth()->attempt($credentials)) {
+        if (! $token = auth()->attempt($credentials)) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.credentials'),
@@ -133,10 +133,9 @@ class AuthController extends Controller
     /**
      * Get the token array structure.
      *
-     * @param string $token
-     * @param array  $data
-     * @param int    $stt_code
-     *
+     * @param  string  $token
+     * @param  array  $data
+     * @param  int  $stt_code
      * @return JsonResponse
      */
     protected function respondWithToken(string $token, array $data = [], int $stt_code = 200)
@@ -145,17 +144,17 @@ class AuthController extends Controller
             $auth = auth();
 
             return response()->json([
-                'success'      => true,
+                'success' => true,
                 'access_token' => $token,
-                'token_type'   => 'bearer',
-                'expires_in'   => $auth->factory()->getTTL() * 60,
-                'data'         => $data,
+                'token_type' => 'bearer',
+                'expires_in' => $auth->factory()->getTTL() * 60,
+                'data' => $data,
             ], $stt_code);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Không tạo được mã token.',
-                'error'   => $e->getMessage(),
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -175,7 +174,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data'    => [
+                'data' => [
                     'folders' => $folders,
                 ],
             ]);
@@ -191,9 +190,9 @@ class AuthController extends Controller
                 continue;
             }
             $folder_id = $role[1];
-            if (!in_array($folder_id, $folders_ids)) {
+            if (! in_array($folder_id, $folders_ids)) {
                 $list_roles[] = [
-                    'id'   => $folder_id,
+                    'id' => $folder_id,
                     'name' => $role[2],
                 ];
                 $folders_ids[] = $folder_id;
@@ -214,10 +213,10 @@ class AuthController extends Controller
         };
         foreach ($list_roles as $role) {
             $folder_id = $role['id'];
-            if (!in_array($folder_id, $folder_ids)) {
+            if (! in_array($folder_id, $folder_ids)) {
                 $folder = Folder::select(['id', 'name', 'folder_id', 'permission', 'created_at', 'updated_at'])
                     ->find($folder_id);
-                if (!$folder) {
+                if (! $folder) {
                     continue;
                 }
                 $folder['role'] = $role['name'];
@@ -241,7 +240,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'data'    => [
+            'data' => [
                 'folders' => $paginator,
             ],
         ]);
@@ -256,8 +255,8 @@ class AuthController extends Controller
             ->get()
             ->filter(fn ($folderShortcut) => $folderShortcut->folder !== null)
             ->map(fn ($folder) => [
-                'id'         => $folder->folder->id,
-                'name'       => $folder->folder->name,
+                'id' => $folder->folder->id,
+                'name' => $folder->folder->name,
                 'permission' => $folder->folder->folderPermission($user),
                 'deleted_at' => $folder->folder->deleted_at,
                 'created_at' => $folder->folder->created_at,
@@ -270,13 +269,13 @@ class AuthController extends Controller
             ->get()
             ->filter(fn ($fileShortcut) => $fileShortcut->file !== null)
             ->map(fn ($file) => [
-                'id'         => $file->file->id,
-                'name'       => $file->file->name,
-                'path'       => $file->file->path,
-                'upload_by'  => $user->name,
-                'folder_id'  => $file->file->folder_id,
-                'size'       => $file->file->size,
-                'type'       => $file->file->type,
+                'id' => $file->file->id,
+                'name' => $file->file->name,
+                'path' => $file->file->path,
+                'upload_by' => $user->name,
+                'folder_id' => $file->file->folder_id,
+                'size' => $file->file->size,
+                'type' => $file->file->type,
                 'deleted_at' => $file->file->deleted_at,
                 'created_at' => $file->file->created_at,
                 'updated_at' => $file->file->updated_at,
@@ -285,9 +284,9 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'data'    => [
+            'data' => [
                 'folders' => $folders,
-                'files'   => $files,
+                'files' => $files,
             ],
         ]);
     }
@@ -305,21 +304,21 @@ class AuthController extends Controller
                     continue;
                 }
                 $filesTrash = File::onlyTrashed()->where('folder_id', $folder->id)->get();
-                if (!$filesTrash->isEmpty()) {
+                if (! $filesTrash->isEmpty()) {
                     array_push($files, ...$filesTrash);
                 }
             }
             $folders = collect($folders);
             $folders = $folders->filter(
-                fn ($folder) => !$folders->contains('id', $folder->folder_id)
+                fn ($folder) => ! $folders->contains('id', $folder->folder_id)
             )->values()
                 ->toArray();
 
             return response()->json([
                 'success' => true,
-                'data'    => [
+                'data' => [
                     'trash' => [
-                        'files'   => $files,
+                        'files' => $files,
                         'folders' => $folders,
                     ],
                 ],
@@ -332,16 +331,16 @@ class AuthController extends Controller
             $role = explode('.', $role);
             $folder_id = $role[1];
             $folder = Folder::withTrashed()->where('id', $folder_id)->first();
-            if (!$folder) {
+            if (! $folder) {
                 continue;
             }
-            if ($folder->trashed() && !in_array($folder, $folders)) {
+            if ($folder->trashed() && ! in_array($folder, $folders)) {
                 $folders[] = $folder;
                 continue;
             }
             $_files = File::onlyTrashed()->where('folder_id', $folder_id)->get();
             foreach ($_files as $file) {
-                if (!in_array($file, $files)) {
+                if (! in_array($file, $files)) {
                     $files[] = $file;
                 }
             }
@@ -354,15 +353,15 @@ class AuthController extends Controller
         });
 
         $folders = $folders->filter(
-            fn ($folder) => !$folders->contains('id', $folder->folder_id)
+            fn ($folder) => ! $folders->contains('id', $folder->folder_id)
         )->values()
             ->toArray();
 
         return response()->json([
             'success' => true,
-            'data'    => [
+            'data' => [
                 'trash' => [
-                    'files'   => $files,
+                    'files' => $files,
                     'folders' => $folders,
                 ],
             ],
@@ -372,7 +371,7 @@ class AuthController extends Controller
     public function listUsers(Request $request)
     {
         try {
-            if (!$request->user()->hasRole('admin')) {
+            if (! $request->user()->hasRole('admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => __('messages.permission_denied'),
@@ -381,7 +380,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data'    => [
+                'data' => [
                     'users' => $request->get_all ? User::all() : User::paginate(10),
                 ],
                 'message' => 'Lấy danh sách người dùng thành công',
@@ -396,7 +395,7 @@ class AuthController extends Controller
 
     public function editUser(Request $request)
     {
-        if (!$request->user()->hasRole('admin')) {
+        if (! $request->user()->hasRole('admin')) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.permission_denied'),
@@ -404,25 +403,25 @@ class AuthController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'id'       => 'required|exists:users,id',
-            'name'     => 'required|min:3|max:50|regex:/^[\pL\s]+$/u|unique:users,name,'.$request->id,
+            'id' => 'required|exists:users,id',
+            'name' => 'required|min:3|max:50|regex:/^[\pL\s]+$/u|unique:users,name,'.$request->id,
             'username' => 'required|min:4|max:32|regex:/^[a-zA-Z0-9_.]+$/|unique:users,username,'.$request->id,
             'password' => 'nullable|min:4|max:64',
         ], [
-            'id.required'       => __('messages.required', ['attribute' => 'ID']),
-            'id.exists'         => __('messages.not_found', ['attribute' => 'Người dùng']),
-            'name.min'          => __('messages.min', ['attribute' => 'Họ và tên', 'min' => 3]),
-            'name.max'          => __('messages.max', ['attribute' => 'Họ và tên', 'max' => 50]),
-            'name.regex'        => __('messages.regex', ['attribute' => 'Họ và tên']),
-            'name.required'     => __('messages.required', ['attribute' => 'Họ và tên']),
-            'name.unique'       => __('messages.unique', ['attribute' => 'Họ và tên']),
-            'username.min'      => __('messages.min', ['attribute' => 'Tài khoản', 'min' => 4]),
-            'username.max'      => __('messages.max', ['attribute' => 'Tài khoản', 'max' => 32]),
-            'username.unique'   => __('messages.unique', ['attribute' => 'Tài khoản']),
-            'username.regex'    => __('messages.regex', ['attribute' => 'Tài khoản']),
+            'id.required' => __('messages.required', ['attribute' => 'ID']),
+            'id.exists' => __('messages.not_found', ['attribute' => 'Người dùng']),
+            'name.min' => __('messages.min', ['attribute' => 'Họ và tên', 'min' => 3]),
+            'name.max' => __('messages.max', ['attribute' => 'Họ và tên', 'max' => 50]),
+            'name.regex' => __('messages.regex', ['attribute' => 'Họ và tên']),
+            'name.required' => __('messages.required', ['attribute' => 'Họ và tên']),
+            'name.unique' => __('messages.unique', ['attribute' => 'Họ và tên']),
+            'username.min' => __('messages.min', ['attribute' => 'Tài khoản', 'min' => 4]),
+            'username.max' => __('messages.max', ['attribute' => 'Tài khoản', 'max' => 32]),
+            'username.unique' => __('messages.unique', ['attribute' => 'Tài khoản']),
+            'username.regex' => __('messages.regex', ['attribute' => 'Tài khoản']),
             'username.required' => __('messages.required', ['attribute' => 'Tài khoản']),
-            'password.min'      => __('messages.min', ['attribute' => 'Mật khẩu', 'min' => 4]),
-            'password.max'      => __('messages.max', ['attribute' => 'Mật khẩu', 'max' => 64]),
+            'password.min' => __('messages.min', ['attribute' => 'Mật khẩu', 'min' => 4]),
+            'password.max' => __('messages.max', ['attribute' => 'Mật khẩu', 'max' => 64]),
         ]);
 
         if ($validator->fails()) {
@@ -455,7 +454,7 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => __('messages.updated', ['attribute' => 'Người dùng']),
-            'data'    => [
+            'data' => [
                 'user' => $user,
             ],
         ]);
@@ -463,7 +462,7 @@ class AuthController extends Controller
 
     public function deleteUser(Request $request)
     {
-        if (!$request->user()->hasRole('admin')) {
+        if (! $request->user()->hasRole('admin')) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.permission_denied'),
@@ -474,7 +473,7 @@ class AuthController extends Controller
             'id' => 'required|exists:users,id',
         ], [
             'id.required' => __('messages.required', ['attribute' => 'ID']),
-            'id.exists'   => __('messages.not_found', ['attribute' => 'User']),
+            'id.exists' => __('messages.not_found', ['attribute' => 'User']),
         ]);
 
         if ($validator->fails()) {
@@ -498,7 +497,7 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => __('messages.deleted', ['attribute' => 'Người dùng']),
-            'data'    => [
+            'data' => [
                 'user' => $user,
             ],
         ]);
@@ -540,8 +539,8 @@ class AuthController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data'    => [
-                    'files'   => $files,
+                'data' => [
+                    'files' => $files,
                     'folders' => $folders,
                 ],
             ]);
@@ -560,11 +559,11 @@ class AuthController extends Controller
                 Folder::withTrashed()->find($folder_id) :
                 Folder::find($folder_id);
 
-            if (!$folder) {
+            if (! $folder) {
                 continue;
             }
 
-            if (!str_contains($folder->permission, 'read')) {
+            if (! str_contains($folder->permission, 'read')) {
                 continue;
             }
 
@@ -587,7 +586,7 @@ class AuthController extends Controller
             $requestFolderSearchName = strtolower(str_replace(' ', '', removeAccents($request->name)));
             if (str_contains($folderSearchName, $requestFolderSearchName)) {
                 $folder->permission = $folder->folderPermission($user);
-                if (!in_array($folder->id, array_column($folders, 'id'))) {
+                if (! in_array($folder->id, array_column($folders, 'id'))) {
                     if ($request->is_trashed) {
                         if ($folder->deleted_at !== null) {
                             $folders[] = $folder;
@@ -597,7 +596,7 @@ class AuthController extends Controller
                     }
                 }
             }
-            if (!$file_result->isEmpty()) {
+            if (! $file_result->isEmpty()) {
                 $file_result = $file_result->map(function ($file) {
                     $file->upload_by = $file->user->name;
                     unset($file->user);
@@ -610,8 +609,8 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'data'    => [
-                'files'   => $files,
+            'data' => [
+                'files' => $files,
                 'folders' => $folders,
             ],
         ]);

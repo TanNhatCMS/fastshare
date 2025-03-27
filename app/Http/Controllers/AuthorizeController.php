@@ -25,9 +25,9 @@ class AuthorizeController extends BaseAPIController
     public function rules(bool $id = false): array
     {
         $rules = [
-            'authorization'             => 'required|array',
-            'authorization.*.user_id'   => 'required|exists:users,id',
-            'authorization.*.role'      => ['required', new CommaSeparatedArray(Folder::ROLES)],
+            'authorization' => 'required|array',
+            'authorization.*.user_id' => 'required|exists:users,id',
+            'authorization.*.role' => ['required', new CommaSeparatedArray(Folder::ROLES)],
             'authorization.*.folder_id' => 'required|exists:folders,id',
         ];
 
@@ -43,16 +43,16 @@ class AuthorizeController extends BaseAPIController
     public function messages(): array
     {
         return [
-            'authorization.required'             => __('messages.required', ['attribute' => 'authorization']),
-            'authorization.array'                => __('messages.array', ['attribute' => 'authorization']),
-            'authorization.*.user_id.required'   => __('messages.required', ['attribute' => 'user_id']),
-            'authorization.*.user_id.exists'     => __('messages.exists', ['attribute' => 'user_id']),
-            'authorization.*.role.required'      => __('messages.required', ['attribute' => 'role']),
-            'authorization.*.role.in'            => __('messages.in', ['attribute' => 'role']),
+            'authorization.required' => __('messages.required', ['attribute' => 'authorization']),
+            'authorization.array' => __('messages.array', ['attribute' => 'authorization']),
+            'authorization.*.user_id.required' => __('messages.required', ['attribute' => 'user_id']),
+            'authorization.*.user_id.exists' => __('messages.exists', ['attribute' => 'user_id']),
+            'authorization.*.role.required' => __('messages.required', ['attribute' => 'role']),
+            'authorization.*.role.in' => __('messages.in', ['attribute' => 'role']),
             'authorization.*.folder_id.required' => __('messages.required', ['attribute' => 'Thư mục']),
-            'authorization.*.folder_id.exists'   => __('messages.exists', ['attribute' => 'Thư mục']),
-            'folder_id.required'                 => __('messages.required', ['attribute' => 'Thư mục']),
-            'folder_id.exists'                   => __('messages.exists', ['attribute' => 'Thư mục']),
+            'authorization.*.folder_id.exists' => __('messages.exists', ['attribute' => 'Thư mục']),
+            'folder_id.required' => __('messages.required', ['attribute' => 'Thư mục']),
+            'folder_id.exists' => __('messages.exists', ['attribute' => 'Thư mục']),
         ];
     }
 
@@ -92,10 +92,10 @@ class AuthorizeController extends BaseAPIController
 
                 $resultMsg[] = [
                     'user' => [
-                        'id'   => $user->id,
+                        'id' => $user->id,
                         'name' => $user->name,
                     ],
-                    'role'   => $item['role'],
+                    'role' => $item['role'],
                     'folder' => $item['folder_id'],
                 ];
             }
@@ -109,7 +109,7 @@ class AuthorizeController extends BaseAPIController
         return response()->json([
             'success' => true,
             'message' => 'Users has been added to folders successfully.',
-            'data'    => $resultMsg,
+            'data' => $resultMsg,
         ]);
     }
 
@@ -143,10 +143,10 @@ class AuthorizeController extends BaseAPIController
 
                 $resultMsg[] = [
                     'user' => [
-                        'id'   => $user->id,
+                        'id' => $user->id,
                         'name' => $user->name,
                     ],
-                    'role'   => $item['role'],
+                    'role' => $item['role'],
                     'folder' => $item['folder_id'],
                 ];
             }
@@ -160,7 +160,7 @@ class AuthorizeController extends BaseAPIController
         return response()->json([
             'success' => true,
             'message' => __('messages.user_removed_from_folder'),
-            'data'    => $resultMsg,
+            'data' => $resultMsg,
         ]);
     }
 
@@ -170,7 +170,7 @@ class AuthorizeController extends BaseAPIController
 
         $folder = Folder::withTrashed()->where('id', $request->folder_id)->with('children')->first();
 
-        if (!$folder) {
+        if (! $folder) {
             return response()->json([
                 'success' => false,
                 'message' => 'Folder not found.',
@@ -179,7 +179,7 @@ class AuthorizeController extends BaseAPIController
 
         return response()->json([
             'success' => true,
-            'data'    => $folder->members(),
+            'data' => $folder->members(),
         ]);
     }
 
@@ -189,7 +189,7 @@ class AuthorizeController extends BaseAPIController
             'user_id' => 'required|exists:users,id',
         ], [
             'user_id.required' => __('messages.required', ['attribute' => 'user_id']),
-            'user_id.exists'   => __('messages.exists', ['attribute' => 'user_id']),
+            'user_id.exists' => __('messages.exists', ['attribute' => 'user_id']),
         ]);
 
         if ($validator->fails()) {
@@ -227,7 +227,7 @@ class AuthorizeController extends BaseAPIController
         //chỉ giữ lại name và created_at
         $roles = $roles->map(function ($role) {
             return [
-                'name'       => $role->name,
+                'name' => $role->name,
                 'created_at' => $role->pivot->created_at,
             ];
         });
@@ -239,11 +239,11 @@ class AuthorizeController extends BaseAPIController
             $role = explode('.', $_role['name']);
             $folder_id = $role[1];
 
-            if (!in_array($folder_id, $folder_ids)) {
+            if (! in_array($folder_id, $folder_ids)) {
                 $folder = Folder::select(['id', 'name', 'folder_id', 'permission'])
                     ->find($folder_id);
 
-                if (!$folder) {
+                if (! $folder) {
                     continue;
                 }
 
@@ -272,7 +272,7 @@ class AuthorizeController extends BaseAPIController
 
         return response()->json([
             'success' => true,
-            'data'    => [
+            'data' => [
                 'folders' => $folders,
             ],
         ]);
@@ -285,7 +285,7 @@ class AuthorizeController extends BaseAPIController
 
             return response()->json([
                 'success' => true,
-                'data'    => $folders,
+                'data' => $folders,
                 'message' => 'Folders home.',
             ]);
         } catch (Exception $e) {

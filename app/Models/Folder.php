@@ -121,7 +121,7 @@ class Folder extends Model
     public function members(): array
     {
         return [
-            'admin'   => User::role("Folder.{$this->id}.admin")->get(),
+            'admin' => User::role("Folder.{$this->id}.admin")->get(),
             'editors' => User::role("Folder.{$this->id}.editor")->get(),
             'viewers' => User::role("Folder.{$this->id}.viewer")->get(),
         ];
@@ -255,8 +255,7 @@ class Folder extends Model
     /**
      * Lấy tất cả thư mục con bao gồm cả các cấp con của nó.
      *
-     * @param int|null $parent_id
-     *
+     * @param  int|null  $parent_id
      * @return Collection
      */
     public static function getAllChildren(?int $parent_id = 1): Collection

@@ -36,9 +36,9 @@ class CategoryCrudController extends CrudController
         CRUD::addColumn('slug');
         CRUD::addColumn('parent');
         CRUD::addColumn([   // select_multiple: n-n relationship (with pivot table)
-            'label'   => 'Articles', // Table column heading
-            'type'    => 'relationship_count',
-            'name'    => 'articles', // the method that defines the relationship in your Model
+            'label' => 'Articles', // Table column heading
+            'type' => 'relationship_count',
+            'name' => 'articles', // the method that defines the relationship in your Model
             'wrapper' => [
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return backpack_url('article?category_id='.$entry->getKey());
@@ -60,21 +60,21 @@ class CategoryCrudController extends CrudController
         CRUD::setValidation(CategoryRequest::class);
 
         CRUD::addField([
-            'name'  => 'name',
+            'name' => 'name',
             'label' => 'Name',
         ]);
         CRUD::addField([
-            'name'  => 'slug',
+            'name' => 'slug',
             'label' => 'Slug (URL)',
-            'type'  => 'text',
-            'hint'  => 'Will be automatically generated from your name, if left empty.',
+            'type' => 'text',
+            'hint' => 'Will be automatically generated from your name, if left empty.',
             // 'disabled' => 'disabled'
         ]);
         CRUD::addField([
-            'label'     => 'Parent',
-            'type'      => 'select',
-            'name'      => 'parent_id',
-            'entity'    => 'parent',
+            'label' => 'Parent',
+            'type' => 'select',
+            'name' => 'parent_id',
+            'entity' => 'parent',
             'attribute' => 'name',
         ]);
     }

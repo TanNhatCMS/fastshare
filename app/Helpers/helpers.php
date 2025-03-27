@@ -1,11 +1,10 @@
 <?php
 
-if (!function_exists('removeAccents')) {
+if (! function_exists('removeAccents')) {
     /**
      * Chuyển đổi chuỗi có dấu thành không dấu.
      *
-     * @param string $str
-     *
+     * @param  string  $str
      * @return string
      */
     function removeAccents(string $str): string

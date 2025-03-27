@@ -23,7 +23,7 @@ abstract class BaseAPIController extends Controller
             abort(response()->json([
                 'success' => false,
                 'message' => $validator->errors()->first(),
-                'errors'  => $validator->errors(),
+                'errors' => $validator->errors(),
             ], 400));
         }
 
@@ -62,7 +62,7 @@ abstract class BaseAPIController extends Controller
         if ($allow_trash) {
             $folder = Folder::withTrashed()->find($folder_id);
         }
-        if (!$folder) {
+        if (! $folder) {
             abort(response()->json([
                 'success' => false,
                 'message' => __('messages.not_found', ['attribute' => 'Folder']),
@@ -72,7 +72,7 @@ abstract class BaseAPIController extends Controller
             return;
         }
         $hasPermission = $folder->hasPermission($user, $permission);
-        if (!$hasPermission) {
+        if (! $hasPermission) {
             abort(response()->json([
                 'success' => false,
                 'message' => __('messages.permission_denied'),
