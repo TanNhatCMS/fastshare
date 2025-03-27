@@ -18,7 +18,7 @@ return [
     // and choosing that view_namespace instead of the default one. Backpack will load a file from there
     // if it exists, otherwise it will load it from the fallback namespace.
 
-    'view_namespace'          => 'tannhatcms.theme-tabler::',
+    'view_namespace' => 'tannhatcms.theme-tabler::',
     'view_namespace_fallback' => 'tannhatcms.theme-tabler::',
 
     /*
