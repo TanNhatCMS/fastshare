@@ -64,9 +64,9 @@ class FileController extends BaseAPIController implements HasMiddleware
                     return $query->where('folder_id', $this->request->folder_id);
                 }),
             ],
-            'path'      => 'nullable',
-            'type'      => 'required|in:'.implode(',', File::TYPE),
-            'size'      => 'nullable|numeric',
+            'path' => 'nullable',
+            'type' => 'required|in:'.implode(',', File::TYPE),
+            'size' => 'nullable|numeric',
             'folder_id' => 'required|exists:folders,id',
         ];
 
@@ -82,16 +82,16 @@ class FileController extends BaseAPIController implements HasMiddleware
     public function messages(): array
     {
         return [
-            'name.required'      => __('messages.required', ['attribute' => 'name']),
-            'name.unique'        => __('messages.unique', ['attribute' => 'Name']),
-            'path.required'      => __('messages.required', ['attribute' => 'path']),
-            'type.required'      => __('messages.required', ['attribute' => 'type']),
-            'type.in'            => __('messages.in', ['attribute' => 'Type']),
-            'size.numeric'       => __('messages.numeric', ['attribute' => 'Size']),
+            'name.required' => __('messages.required', ['attribute' => 'name']),
+            'name.unique' => __('messages.unique', ['attribute' => 'Name']),
+            'path.required' => __('messages.required', ['attribute' => 'path']),
+            'type.required' => __('messages.required', ['attribute' => 'type']),
+            'type.in' => __('messages.in', ['attribute' => 'Type']),
+            'size.numeric' => __('messages.numeric', ['attribute' => 'Size']),
             'folder_id.required' => __('messages.required', ['attribute' => 'folder']),
-            'folder_id.exists'   => __('messages.exists', ['attribute' => 'Folder']),
-            'id.required'        => __('messages.required', ['attribute' => 'file']),
-            'id.exists'          => __('messages.exists', ['attribute' => 'File']),
+            'folder_id.exists' => __('messages.exists', ['attribute' => 'Folder']),
+            'id.required' => __('messages.required', ['attribute' => 'file']),
+            'id.exists' => __('messages.exists', ['attribute' => 'File']),
         ];
     }
 
@@ -103,7 +103,7 @@ class FileController extends BaseAPIController implements HasMiddleware
             ])
             ->find($request->id);
 
-        if (!$file) {
+        if (! $file) {
             return response()->json([
                 'success' => false,
                 'message' => 'Không tìm thấy tập tin',
@@ -117,7 +117,7 @@ class FileController extends BaseAPIController implements HasMiddleware
 
         return response()->json([
             'success' => true,
-            'data'    => [
+            'data' => [
                 'file' => $file,
             ],
         ]);
@@ -131,14 +131,14 @@ class FileController extends BaseAPIController implements HasMiddleware
 
         $user = $request->user();
 
-        if (!$user->hasRole('admin') && !$user->hasPermissionTo("Folder.{$request->folder_id}.create")) {
+        if (! $user->hasRole('admin') && ! $user->hasPermissionTo("Folder.{$request->folder_id}.create")) {
             abort(response()->json([
                 'success' => false,
                 'message' => __('messages.permission_denied'),
             ], 403));
         }
 
-        if (!$request->has('file') && !$request->has('path')) {
+        if (! $request->has('file') && ! $request->has('path')) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.required', ['attribute' => 'File or path']),
@@ -170,8 +170,8 @@ class FileController extends BaseAPIController implements HasMiddleware
 
                     // Kiểm tra loại MIME
                     if (
-                        !in_array($fileUpload->getMimeType(), File::IMAGE_MIME) &&
-                        !in_array($fileUpload->getMimeType(), File::DOCUMENT_MIME)
+                        ! in_array($fileUpload->getMimeType(), File::IMAGE_MIME) &&
+                        ! in_array($fileUpload->getMimeType(), File::DOCUMENT_MIME)
                     ) {
                         return response()->json([
                             'success' => false,
@@ -195,12 +195,12 @@ class FileController extends BaseAPIController implements HasMiddleware
             } else {
                 // Xử lý khi có đường dẫn URL
                 $path = $request->path; // Lưu giá trị vào biến
-                if (!filter_var($path, FILTER_VALIDATE_URL)) {
+                if (! filter_var($path, FILTER_VALIDATE_URL)) {
                     return response()->json([
                         'success' => false,
                         'message' => __('messages.invalid_type', [
                             'attribute' => 'Path',
-                            'type'      => 'URL (https://domain.com)',
+                            'type' => 'URL (https://domain.com)',
                         ]),
                     ], 400);
                 }
@@ -226,7 +226,7 @@ class FileController extends BaseAPIController implements HasMiddleware
 
         return response()->json([
             'message' => 'Tải lên thành công!',
-            'data'    => [
+            'data' => [
                 'files' => $files,
             ],
         ]);
@@ -261,7 +261,7 @@ class FileController extends BaseAPIController implements HasMiddleware
 
             $hasPermission = $request->user()->hasPermissionTo("Folder.{$request->folder_id}.update");
 
-            if (!$hasPermission && !$request->user()->hasRole('admin')) {
+            if (! $hasPermission && ! $request->user()->hasRole('admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => __('messages.permission_denied'),
@@ -282,18 +282,18 @@ class FileController extends BaseAPIController implements HasMiddleware
         }
 
         if ($file->type === 'link') {
-            if (!filter_var($request->path, FILTER_VALIDATE_URL)) {
+            if (! filter_var($request->path, FILTER_VALIDATE_URL)) {
                 return response()->json([
                     'success' => false,
                     'message' => __('messages.invalid_type', [
                         'attribute' => 'Path',
-                        'type'      => 'URL (https://domain.com)',
+                        'type' => 'URL (https://domain.com)',
                     ]),
                 ], 400);
             }
         }
 
-        if (!$this->request_data['name']) {
+        if (! $this->request_data['name']) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.required', ['attribute' => 'Name']),
@@ -304,7 +304,7 @@ class FileController extends BaseAPIController implements HasMiddleware
 
         return response()->json([
             'message' => 'Tập tin đã được cập nhật!',
-            'data'    => [
+            'data' => [
                 'file' => $file,
             ],
         ]);
@@ -314,7 +314,7 @@ class FileController extends BaseAPIController implements HasMiddleware
     {
         $file = File::withTrashed()->find($request->id);
 
-        if (!$file) {
+        if (! $file) {
             return response()->json([
                 'success' => false,
                 'message' => 'Không tìm thấy tập tin',
@@ -335,7 +335,7 @@ class FileController extends BaseAPIController implements HasMiddleware
 
         return response()->json([
             'message' => 'Đã xóa thành công!',
-            'data'    => [
+            'data' => [
                 'file' => $file,
             ],
         ]);
@@ -351,7 +351,7 @@ class FileController extends BaseAPIController implements HasMiddleware
 
         $user = $request->user();
 
-        if (!$user->hasRole('admin') && !$user->hasPermissionTo("Folder.{$file->folder_id}.delete")) {
+        if (! $user->hasRole('admin') && ! $user->hasPermissionTo("Folder.{$file->folder_id}.delete")) {
             abort(response()->json([
                 'success' => false,
                 'message' => __('messages.permission_denied'),
@@ -363,7 +363,7 @@ class FileController extends BaseAPIController implements HasMiddleware
         return response()->json([
             'success' => true,
             'message' => 'Đã khôi phục tập tin!',
-            'data'    => [
+            'data' => [
                 'file' => $file,
             ],
         ]);
@@ -373,7 +373,7 @@ class FileController extends BaseAPIController implements HasMiddleware
     {
         $file = File::withTrashed()->find($request->id);
 
-        if (!$file) {
+        if (! $file) {
             return response()->json([
                 'success' => false,
                 'message' => 'File not found',
@@ -390,7 +390,7 @@ class FileController extends BaseAPIController implements HasMiddleware
 
         return response()->json([
             'message' => 'File deleted!',
-            'data'    => [
+            'data' => [
                 'file' => $file,
             ],
         ]);
@@ -402,7 +402,7 @@ class FileController extends BaseAPIController implements HasMiddleware
 
         $file = File::where('path', $path)->first();
 
-        if (!$file) {
+        if (! $file) {
             return response()->json([
                 'success' => false,
                 'message' => 'Không tìm thấy tập tin này!',
@@ -419,7 +419,7 @@ class FileController extends BaseAPIController implements HasMiddleware
             return $exRole[1] ?? null;
         })->filter()->unique()->values()->toArray();
 
-        if (!in_array($file->folder_id, $rolesFolder) && !$request->user()->hasRole('admin')) {
+        if (! in_array($file->folder_id, $rolesFolder) && ! $request->user()->hasRole('admin')) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.permission_denied'),
@@ -436,7 +436,7 @@ class FileController extends BaseAPIController implements HasMiddleware
 
         return response()->json([
             'success' => true,
-            'data'    => [
+            'data' => [
                 'url' => $url,
             ],
         ]);
@@ -448,18 +448,18 @@ class FileController extends BaseAPIController implements HasMiddleware
 
         $path = "files/$path";
 
-        if (!$request->hasValidSignature()) {
+        if (! $request->hasValidSignature()) {
             abort(401);
         }
 
         $file = storage_path("app/$path");
 
-        if (!file_exists($file)) {
+        if (! file_exists($file)) {
             abort(404);
         }
 
         return response()->file($file, [
-            'Content-Type'        => mime_content_type($file),
+            'Content-Type' => mime_content_type($file),
             'Content-Disposition' => 'filename='.basename($file),
             // 'Content-Disposition' => "document;filename=" . basename($file)
         ]);
@@ -468,13 +468,13 @@ class FileController extends BaseAPIController implements HasMiddleware
     public function setShortcut(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'file_id'  => 'required|exists:files,id',
+            'file_id' => 'required|exists:files,id',
             'shortcut' => 'required|boolean',
         ], [
-            'file_id.required'  => __('messages.required', ['attribute' => 'file id']),
-            'file_id.exists'    => __('messages.exists', ['attribute' => 'File']),
+            'file_id.required' => __('messages.required', ['attribute' => 'file id']),
+            'file_id.exists' => __('messages.exists', ['attribute' => 'File']),
             'shortcut.required' => __('messages.required', ['attribute' => 'shortcut']),
-            'shortcut.boolean'  => __('messages.boolean', ['attribute' => 'shortcut']),
+            'shortcut.boolean' => __('messages.boolean', ['attribute' => 'shortcut']),
         ]);
 
         if ($validator->fails()) {
@@ -486,7 +486,7 @@ class FileController extends BaseAPIController implements HasMiddleware
 
         $file = File::find($request->file_id);
 
-        if (!$file) {
+        if (! $file) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.not_found', ['attribute' => 'File']),
@@ -514,7 +514,7 @@ class FileController extends BaseAPIController implements HasMiddleware
                 ->where('user_id', $request->user()->id)
                 ->first();
 
-            if (!$fileShortcut) {
+            if (! $fileShortcut) {
                 return response()->json([
                     'message' => __('messages.not_found', ['attribute' => 'File shortcut']),
                     'success' => false,

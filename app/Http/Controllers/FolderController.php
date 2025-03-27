@@ -51,7 +51,7 @@ class FolderController extends BaseAPIController implements HasMiddleware
                     return $query->where('folder_id', $this->request->id);
                 }),
             ],
-            'folder_id'  => 'nullable|exists:folders,id',
+            'folder_id' => 'nullable|exists:folders,id',
             'permission' => ['nullable', new CommaSeparatedArray(Folder::PERMISSIONS)],
         ];
 
@@ -65,12 +65,12 @@ class FolderController extends BaseAPIController implements HasMiddleware
     public function messages(): array
     {
         return [
-            'name.required'    => __('messages.required', ['attribute' => 'tên']),
-            'name.unique'      => __('messages.unique', ['attribute' => 'Tên']),
+            'name.required' => __('messages.required', ['attribute' => 'tên']),
+            'name.unique' => __('messages.unique', ['attribute' => 'Tên']),
             'folder_id.exists' => __('messages.exists', ['attribute' => 'Parent folder']),
-            'id.required'      => __('messages.required', ['attribute' => 'thư mục']),
-            'id.exists'        => __('messages.exists', ['attribute' => 'Thư mục']),
-            'permission.in'    => __('messages.in', ['attribute' => 'Permission']),
+            'id.required' => __('messages.required', ['attribute' => 'thư mục']),
+            'id.exists' => __('messages.exists', ['attribute' => 'Thư mục']),
+            'permission.in' => __('messages.in', ['attribute' => 'Permission']),
         ];
     }
 
@@ -83,14 +83,14 @@ class FolderController extends BaseAPIController implements HasMiddleware
             ->withCount('children')
             ->find($request->id);
 
-        if (!$folder) {
+        if (! $folder) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.not_found', ['attribute' => 'Thư mục']),
             ], 404);
         }
         $user = $request->user();
-        if (!$user->hasRole('admin')) {
+        if (! $user->hasRole('admin')) {
             $roles = $user->getRoleNames();
             $folder_ids = [];
             $list_roles = [];
@@ -100,9 +100,9 @@ class FolderController extends BaseAPIController implements HasMiddleware
                     continue;
                 }
                 $folder_id = $role[1];
-                if (!in_array($folder_id, $folder_ids)) {
+                if (! in_array($folder_id, $folder_ids)) {
                     $list_roles[] = [
-                        'id'   => $folder_id,
+                        'id' => $folder_id,
                         'name' => $role[2],
                     ];
                     $folder_ids[] = $folder_id;
@@ -149,7 +149,7 @@ class FolderController extends BaseAPIController implements HasMiddleware
 
         return response()->json([
             'success' => true,
-            'data'    => [
+            'data' => [
                 'folders' => $folder,
                 'members' => $folder->members(),
             ],
@@ -169,7 +169,7 @@ class FolderController extends BaseAPIController implements HasMiddleware
             implode(',', array_map('trim', $request->permission)) :
             $request->permission;
 
-        if (!$user->hasRole('admin')) {
+        if (! $user->hasRole('admin')) {
             $permissions = $parent_folder->permission;
         }
 
@@ -191,9 +191,9 @@ class FolderController extends BaseAPIController implements HasMiddleware
 
         return response()->json([
             'message' => 'Folder created!',
-            'data'    => [
+            'data' => [
                 'folder' => $folder,
-                'm'      => $parent_folder->members(),
+                'm' => $parent_folder->members(),
             ],
         ]);
     }
@@ -242,7 +242,7 @@ class FolderController extends BaseAPIController implements HasMiddleware
 
         return response()->json([
             'message' => 'Đã chỉnh sửa thư mục!',
-            'data'    => [
+            'data' => [
                 'folder' => $folder,
             ],
         ]);
@@ -256,7 +256,7 @@ class FolderController extends BaseAPIController implements HasMiddleware
             ->with('files', 'children')
             ->find($request->id);
 
-        if (!$folder) {
+        if (! $folder) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.not_found', ['attribute' => 'Folder']),
@@ -275,9 +275,9 @@ class FolderController extends BaseAPIController implements HasMiddleware
 
         return response()->json([
             'message' => $message,
-            'data'    => [
+            'data' => [
                 'folder' => [
-                    'id'   => $folder->id,
+                    'id' => $folder->id,
                     'name' => $folder->name,
                 ],
             ],
@@ -301,7 +301,7 @@ class FolderController extends BaseAPIController implements HasMiddleware
 
         $folder = Folder::withTrashed()->find($request->id);
 
-        if (!$folder) {
+        if (! $folder) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.not_found', ['attribute' => 'Folder']),
@@ -312,7 +312,7 @@ class FolderController extends BaseAPIController implements HasMiddleware
 
         $user = $request->user();
 
-        if (!$user->hasRole('admin') && !$user->hasPermissionTo("Folder.{$folder->id}.delete")) {
+        if (! $user->hasRole('admin') && ! $user->hasPermissionTo("Folder.{$folder->id}.delete")) {
             abort(response()->json([
                 'success' => false,
                 'message' => __('messages.permission_denied'),
@@ -325,7 +325,7 @@ class FolderController extends BaseAPIController implements HasMiddleware
         return response()->json([
             'success' => true,
             'message' => 'Thư mục đã được khôi phục!',
-            'data'    => [
+            'data' => [
                 'folder' => $folder,
             ],
         ]);
@@ -339,7 +339,7 @@ class FolderController extends BaseAPIController implements HasMiddleware
             ->with('files', 'children')
             ->find($request->id);
 
-        if (!$folder) {
+        if (! $folder) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.not_found', ['attribute' => 'Thư mục']),
@@ -352,9 +352,9 @@ class FolderController extends BaseAPIController implements HasMiddleware
 
         return response()->json([
             'message' => __('messages.deleted_permanently', ['attribute' => 'Thư mục']),
-            'data'    => [
+            'data' => [
                 'folder' => [
-                    'id'   => $folder->id,
+                    'id' => $folder->id,
                     'name' => $folder->name,
                 ],
             ],
@@ -367,7 +367,7 @@ class FolderController extends BaseAPIController implements HasMiddleware
 
         $folder = Folder::find($request->id);
 
-        if (!$folder) {
+        if (! $folder) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.not_found', ['attribute' => 'Thư mục']),
@@ -381,7 +381,7 @@ class FolderController extends BaseAPIController implements HasMiddleware
 
         return response()->json([
             'success' => true,
-            'data'    => [
+            'data' => [
                 'files' => $files,
             ],
         ]);
@@ -391,12 +391,12 @@ class FolderController extends BaseAPIController implements HasMiddleware
     {
         $validator = Validator::make($request->all(), [
             'folder_id' => 'required|exists:folders,id',
-            'shortcut'  => 'required|boolean',
+            'shortcut' => 'required|boolean',
         ], [
             'folder_id.required' => __('messages.required', ['attribute' => 'folder id']),
-            'folder_id.exists'   => __('messages.exists', ['attribute' => 'Thư mục']),
-            'shortcut.required'  => __('messages.required', ['attribute' => 'shortcut']),
-            'shortcut.boolean'   => __('messages.boolean', ['attribute' => 'shortcut']),
+            'folder_id.exists' => __('messages.exists', ['attribute' => 'Thư mục']),
+            'shortcut.required' => __('messages.required', ['attribute' => 'shortcut']),
+            'shortcut.boolean' => __('messages.boolean', ['attribute' => 'shortcut']),
         ]);
 
         if ($validator->fails()) {
@@ -408,7 +408,7 @@ class FolderController extends BaseAPIController implements HasMiddleware
 
         $folder = Folder::find($request->folder_id);
 
-        if (!$folder) {
+        if (! $folder) {
             return response()->json([
                 'success' => false,
                 'message' => __('messages.not_found', ['attribute' => 'Thư mục']),
@@ -436,7 +436,7 @@ class FolderController extends BaseAPIController implements HasMiddleware
                 ->where('user_id', $request->user()->id)
                 ->first();
 
-            if (!$folderShortcut) {
+            if (! $folderShortcut) {
                 return response()->json([
                     'message' => __('messages.not_found', ['attribute' => 'Folder shortcut']),
                     'success' => false,

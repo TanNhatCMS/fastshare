@@ -71,7 +71,9 @@ class ElfinderCustomController extends Controller
     public function showFilePicker($input_id)
     {
         $type = Request::input('type');
-        $mimeTypes = implode(',', array_map(function ($t) {return "'".$t."'"; }, explode(',', $type)));
+        $mimeTypes = implode(',', array_map(function ($t) {
+            return "'".$t."'";
+        }, explode(',', $type)));
 
         return $this->app['view']
             ->make($this->package.'::filepicker')
@@ -86,9 +88,9 @@ class ElfinderCustomController extends Controller
             $dirs = (array) $this->app['config']->get('elfinder.dir', []);
             foreach ($dirs as $dir) {
                 $roots[] = [
-                    'driver'        => 'LocalFileSystem', // driver for accessing file system (REQUIRED)
-                    'path'          => public_path($dir), // path to files (REQUIRED)
-                    'URL'           => url($dir), // URL to files (REQUIRED)
+                    'driver' => 'LocalFileSystem', // driver for accessing file system (REQUIRED)
+                    'path' => public_path($dir), // path to files (REQUIRED)
+                    'URL' => url($dir), // URL to files (REQUIRED)
                     'accessControl' => $this->app->config->get('elfinder.access'), // filter callback (OPTIONAL)
                 ];
             }
@@ -102,13 +104,13 @@ class ElfinderCustomController extends Controller
                 $disk = app('filesystem')->disk($key);
                 if ($disk instanceof FilesystemAdapter) {
                     $defaults = [
-                        'driver'        => 'Flysystem',
-                        'filesystem'    => $disk->getDriver(),
-                        'alias'         => $key,
+                        'driver' => 'Flysystem',
+                        'filesystem' => $disk->getDriver(),
+                        'alias' => $key,
                         'accessControl' => $this->app->config->get('elfinder.access'), // filter callback (OPTIONAL)
                     ];
                     $root = array_merge($defaults, $root);
-                    if (!isset($root['URL'])) {
+                    if (! isset($root['URL'])) {
                         $root['URLCallback'] = function ($path) use ($disk) {
                             return $disk->url($path);
                         };
@@ -144,7 +146,7 @@ class ElfinderCustomController extends Controller
     {
         $dir = 'packages/barryvdh/'.$this->package;
         $locale = str_replace('-', '_', $this->app->config->get('app.locale'));
-        if (!file_exists($this->app['path.public']."/$dir/js/i18n/elfinder.$locale.js")) {
+        if (! file_exists($this->app['path.public']."/$dir/js/i18n/elfinder.$locale.js")) {
             $locale = false;
         }
         $csrf = true;

@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->createFoler(1, null);
 
         $user = User::factory()->create([ // mật khẩu ở UserFactory mặc định là "1234"
-            'name'     => 'Admin',
+            'name' => 'Admin',
             'username' => 'admin',
         ]);
 
@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
     private function createFoler($num = 1, $folder_id = 1): void
     {
         Folder::factory($num)->create([
-            'folder_id'  => $folder_id === null ? null : $folder_id,
+            'folder_id' => $folder_id === null ? null : $folder_id,
             'permission' => 'create,read,update,delete',
         ])->each(function ($folder) {
             (new Folder())->initAuthoredFolder($folder->id);

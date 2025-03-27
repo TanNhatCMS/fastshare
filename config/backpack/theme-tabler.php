@@ -55,8 +55,8 @@ return [
          */
         'colorModes' => [
             'system' => 'la-desktop',
-            'light'  => 'la-sun',
-            'dark'   => 'la-moon',
+            'light' => 'la-sun',
+            'dark' => 'la-moon',
         ],
 
         /**

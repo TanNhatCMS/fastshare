@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group([
     'middleware' => 'api',
-    'prefix'     => 'auth',
+    'prefix' => 'auth',
 ], function () {
     Route::post('/register', [AuthController::class, 'register'])
         ->middleware('auth:api')
@@ -103,7 +103,7 @@ Route::group([
 
 Route::group([
     'middleware' => ['api', 'auth:api', 'role:admin'],
-    'prefix'     => 'admin',
+    'prefix' => 'admin',
 ], function () {
     Route::prefix('folder')->group(function () {
         Route::post('add-user', [AuthorizeController::class, 'addUserToFolder'])

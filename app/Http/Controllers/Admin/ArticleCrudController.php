@@ -53,23 +53,23 @@ class ArticleCrudController extends CrudController
         $this->crud->operation('list', function () {
             $this->crud->addColumn('title');
             $this->crud->addColumn([
-                'name'  => 'date',
+                'name' => 'date',
                 'label' => 'Date',
-                'type'  => 'date',
+                'type' => 'date',
             ]);
             $this->crud->addColumn('status');
             $this->crud->addColumn([
-                'name'  => 'featured',
+                'name' => 'featured',
                 'label' => 'Featured',
-                'type'  => 'check',
+                'type' => 'check',
             ]);
             $this->crud->addColumn([
-                'label'     => 'Category',
-                'type'      => 'select',
-                'name'      => 'category_id',
-                'entity'    => 'category',
+                'label' => 'Category',
+                'type' => 'select',
+                'name' => 'category_id',
+                'entity' => 'category',
                 'attribute' => 'name',
-                'wrapper'   => [
+                'wrapper' => [
                     'href' => function ($crud, $column, $entry, $related_key) {
                         return backpack_url('category/'.$related_key.'/show');
                     },
@@ -78,8 +78,8 @@ class ArticleCrudController extends CrudController
             $this->crud->addColumn('tags');
 
             $this->crud->addFilter([ // select2 filter
-                'name'  => 'category_id',
-                'type'  => 'select2',
+                'name' => 'category_id',
+                'type' => 'select2',
                 'label' => 'Category',
             ], function () {
                 return Category::all()->keyBy('id')->pluck('name', 'id')->toArray();
@@ -88,8 +88,8 @@ class ArticleCrudController extends CrudController
             });
 
             $this->crud->addFilter([ // select2_multiple filter
-                'name'  => 'tags',
-                'type'  => 'select2_multiple',
+                'name' => 'tags',
+                'type' => 'select2_multiple',
                 'label' => 'Tags',
             ], function () {
                 return Tag::all()->keyBy('id')->pluck('name', 'id')->toArray();
@@ -115,67 +115,67 @@ class ArticleCrudController extends CrudController
             $this->crud->setValidation(ArticleRequest::class);
 
             $this->crud->addField([
-                'name'        => 'title',
-                'label'       => 'Title',
-                'type'        => 'text',
+                'name' => 'title',
+                'label' => 'Title',
+                'type' => 'text',
                 'placeholder' => 'Your title here',
             ]);
             $this->crud->addField([
-                'name'  => 'slug',
+                'name' => 'slug',
                 'label' => 'Slug (URL)',
-                'type'  => 'text',
-                'hint'  => 'Will be automatically generated from your title, if left empty.',
+                'type' => 'text',
+                'hint' => 'Will be automatically generated from your title, if left empty.',
                 // 'disabled' => 'disabled'
             ]);
             $this->crud->addField([
-                'name'    => 'date',
-                'label'   => 'Date',
-                'type'    => 'date',
+                'name' => 'date',
+                'label' => 'Date',
+                'type' => 'date',
                 'default' => date('Y-m-d'),
             ]);
             $this->crud->addField([
-                'name'        => 'content',
-                'label'       => 'Content',
-                'type'        => 'ckeditor',
+                'name' => 'content',
+                'label' => 'Content',
+                'type' => 'ckeditor',
                 'placeholder' => 'Your textarea text here',
             ]);
             $this->crud->addField([
-                'name'  => 'image',
+                'name' => 'image',
                 'label' => 'Image',
-                'type'  => 'browse',
+                'type' => 'browse',
             ]);
             $this->crud->addField([
-                'label'         => 'Category',
-                'type'          => 'relationship',
-                'name'          => 'category_id',
-                'entity'        => 'category',
-                'attribute'     => 'name',
+                'label' => 'Category',
+                'type' => 'relationship',
+                'name' => 'category_id',
+                'entity' => 'category',
+                'attribute' => 'name',
                 'inline_create' => true,
-                'ajax'          => true,
+                'ajax' => true,
             ]);
             $this->crud->addField([
-                'label'         => 'Tags',
-                'type'          => 'relationship',
-                'name'          => 'tags', // the method that defines the relationship in your Model
-                'entity'        => 'tags', // the method that defines the relationship in your Model
-                'attribute'     => 'name', // foreign key attribute that is shown to user
-                'pivot'         => true, // on create&update, do you need to add/delete pivot table entries?
+                'label' => 'Tags',
+                'type' => 'relationship',
+                'name' => 'tags', // the method that defines the relationship in your Model
+                'entity' => 'tags', // the method that defines the relationship in your Model
+                'attribute' => 'name', // foreign key attribute that is shown to user
+                'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
                 'inline_create' => ['entity' => 'tag'],
-                'ajax'          => true,
+                'ajax' => true,
             ]);
             $this->crud->addField([
-                'name'    => 'status',
-                'label'   => 'Status',
-                'type'    => 'select_from_array',
+                'name' => 'status',
+                'label' => 'Status',
+                'type' => 'select_from_array',
                 'options' => [
                     'PUBLISHED' => 'PUBLISHED',
-                    'DRAFT'     => 'DRAFT',
+                    'DRAFT' => 'DRAFT',
                 ],
             ]);
             $this->crud->addField([
-                'name'  => 'featured',
+                'name' => 'featured',
                 'label' => 'Featured item',
-                'type'  => 'checkbox',
+                'type' => 'checkbox',
             ]);
         });
     }
