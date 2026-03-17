@@ -12,7 +12,7 @@
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.10.1",
+        "laravel/tinker": "^3.0.0",
         "php-open-source-saver/jwt-auth": "^2.8",
         "tannhatcms/basset": "^2.0",
         "tannhatcms/crud": "^6.8.3",
